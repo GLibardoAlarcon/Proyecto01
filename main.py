@@ -1,0 +1,97 @@
+from fastapi import FastAPI, File, UploadFile, HTTPException
+import pandas as pd
+from babel.dates import format_date
+from io import BytesIO
+app = FastAPI()
+
+# Variable global para almacenar el DataFrame
+df_movies = None
+# Utilizamos poet para que nos pueda recibir nuestro archivo parquet
+@app.post("/upload-parquet/", tags=['Carga_parquet'])
+# Realizamos la función
+async def upload_parquet(file: UploadFile = File(...)):
+    # Creamos nuestra variable global
+    global df_movies
+    contents = await file.read()
+    try:
+        # Si todo sale bien nos carga el archivo y retorna un mensaje de confirmación
+        df_movies = pd.read_parquet(BytesIO(contents), engine='pyarrow')
+    except Exception as e:
+        # Envia un error de no cargarce
+        raise HTTPException(status_code=400, detail=str(e))
+    return {"message": "Archivo Parquet cargado con éxito"}
+
+
+@app.get("/FilmacionesM/", tags=['Proyecto_01'])
+# Función para la cantidas de filmaciones segun el mes
+async def cantidad_filmaciones_mes(mes: str):
+    # Variable que se hace cargo de llevar el conteo
+    conteo = 0
+    # Condición que nos permite saber si se cargo el archivo
+    if df_movies is not None:
+        # Toma todos los meses en idioma español
+        mes1 = df_movies['release_date'].apply(lambda x: format_date(x, 'MMMM', locale='es_ES'))
+        # Ciclo para recorrer cada uno de los meses 
+        for i in range(0, len(df_movies)):
+            # Si el mes ingresado es igual al de la columna se incrementara en 1
+            if mes1[i] == mes:
+                conteo +=1
+        # Variable donde optendremos la información
+        Variable = {str(conteo): "Cantidad de péliculas fuerón estrenadas en el", "mes de": mes}
+    else:
+        raise HTTPException(status_code=404, detail="No se ha cargado ningún archivo Parquet")
+    return Variable
+
+@app.get("/FilmacionesD", tags=['Proyecto_01'])
+# Creamos la función
+async def cantidad_filmaciones_dia(dia: str):
+    # Variable conteo
+    conteoD = 0
+    # condición para saber si cargo el archivo
+    if df_movies is not None:
+        # Trasformación en dias en español
+        dia1 = df_movies['release_date'].apply(lambda x: format_date(x, 'EEEE', locale='es_ES'))
+        # Ciclo para recorrer cada día
+        for i in range(0, len(df_movies)):
+            # validación de día
+            if dia1[i] == dia:
+                conteoD += 1
+    else:
+        raise HTTPException(status_code=404, detail="No se ha cargado ningún archivo Parquet")
+    return{str(conteoD): "cantidad de peliculas fuerón estrenadas en los", "dias": dia}
+
+@app.get("/score", tags=['Proyecto_01'])
+# Función para el score por filmación
+async def score_titulo(Titulo: str):
+    # Condición para saber si cargo el archivo
+    Variable = {"El dato ingresado es incorrecto o no": "se encuentra en nuestra base de datos"}
+    if df_movies is not None:
+         # ciclo para recorrer cada uno de los titulos
+         for i in range(0, len(df_movies)):
+             # Si el titulo es el mismo que el ingresado nos guarda la información en cada una de las variables
+             if df_movies['title'][i] == Titulo:
+                popularity = df_movies['popularity'][i]
+                year = df_movies['release_year'][i]
+                Variable = {"La pelicula": Titulo, "Fue estrenada en el año": str(year), "Con un score/popularidad de": str(popularity)}
+    else:
+      raise HTTPException(status_code=404, detail="No se ha cargado ningún archivo Parquet")
+    return Variable
+
+@app.get("/Votos", tags=['Proyecto_01'])
+# Creamos la función
+async def votos_titulo(Titulo: str):
+    # Si no encuentra el titulo solicitado
+    Variable = {"El dato ingresado es incorrecto o no": "se encuentra en nuestra base de datos"}
+    # Condición para saber si cargo el archivo
+    if df_movies is not None:
+        # Ciclo para recorrer
+        for i in range(0, len(df_movies)):
+            # Condición para saber si el titulo existe
+            if df_movies['title'][i] == Titulo:
+                Variable = {"La pelicula elegida no tiene mas de 2000 votaciones": "Por lo que no se muestra ningun valor"}
+                # COndición para las peliculas que tienen mas de 2000
+                if df_movies['vote_count'][i] >= 2000:
+                    Variable = {"La pelicula": Titulo, "fue estrenada en el año": str(df_movies['release_year'][i]), "La misma cuenta con un total de": str(df_movies['vote_count'][i]), "valoraciones, con un promedio de": str(df_movies['vote_average'][i])}
+    else:
+      raise HTTPException(status_code=404, detail="No se ha cargado ningún archivo Parquet")
+    return Variable
