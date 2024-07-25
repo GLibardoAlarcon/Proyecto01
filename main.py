@@ -95,3 +95,38 @@ async def votos_titulo(Titulo: str):
     else:
       raise HTTPException(status_code=404, detail="No se ha cargado ningún archivo Parquet")
     return Variable
+
+@app.get("/Actor", tags=['Proyecto_01'])
+async def actor(Actor: str):
+    Variable = {"El dato ingresado es incorrecto o no": "se encuentra en nuestra base de datos"}
+    conteo = 0
+    retorno = 0
+    promedio = 0
+    if df_movies is not None:
+        for indice, fila in df_movies.iterrows():
+           for i in range(0, 9):
+               if fila[i] == Actor:
+                   conteo += 1
+                   retorno += fila[20]
+        promedio = retorno / conteo
+        Variable = {"El actor": Actor, "ha participado de": str(conteo), "cantidad de filmaciones, el mismo ha conseguido un retorno de": str(retorno), "con un promedio de": str(promedio), "por": "filmacion"}
+    else:
+        raise HTTPException(status_code=404, detail="No se ha cargado ningún archivo Parquet")
+    return Variable
+
+@app.get("/Director", tags=['Proyecto_01'])
+async def Director(Director: str):
+    Datos = []
+    Retorno = 0
+    if df_movies is not None:
+        for i in range(0, len(df_movies)):
+            if df_movies['crew_Director'][i] == Director:
+                Datos.append({"Titulo": str(df_movies['title'][i]), "Fecha de lanzamiento": str(df_movies['release_date'][i]), "Costo": str(df_movies['budget'][i]), "Ganancia": str(df_movies['revenue'][i] - df_movies['budget'][i])})
+                Retorno += df_movies['return'][i]
+        Datos.append({"Exito segun retorno": str(Retorno)})
+    else:
+        raise HTTPException(status_code=404, detail="No se ha cargado ningún archivo Parquet")
+    return Datos        
+    
+
+
