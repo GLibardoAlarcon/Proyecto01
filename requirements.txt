@@ -1,4 +1,4 @@
-decorador
+decorator
 fastapi
 matplotlib-inline
 numpy
