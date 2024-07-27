@@ -10,3 +10,4 @@ wcwidth
 requests
 wordcloud
 babel
+pyarrow
