@@ -9,8 +9,7 @@ from sklearn.cluster import KMeans
 from sklearn.metrics.pairwise import cosine_similarity
 app = FastAPI()
 
-# Para cada función se tiene que ingresar el archivo, en la ruta de cada función contamos con un nombre que hace referencia 
-# a el archivo que consume cada una
+# Para cada una de estas funciones hay que agregar un archivo en cual funciona para todas estas el cual es df_union.parquet
 
 # Variable global para almacenar el DataFrame
 df_movies = None
@@ -30,7 +29,7 @@ async def upload_parquet(file: UploadFile = File(...)):
     return {"message": "Archivo Parquet cargado con éxito"}
 
 
-@app.get("/Movies/", tags=['Proyecto_01'])
+@app.get("/filmaciones M/", tags=['Proyecto_01'])
 # Función para la cantidas de filmaciones segun el mes
 async def cantidad_filmaciones_mes(mes: str):
     # Variable que se hace cargo de llevar el conteo
@@ -50,7 +49,7 @@ async def cantidad_filmaciones_mes(mes: str):
         raise HTTPException(status_code=404, detail="No se ha cargado ningún archivo Parquet")
     return Variable
 
-@app.get("/Movies1", tags=['Proyecto_01'])
+@app.get("/Filmaciones D", tags=['Proyecto_01'])
 # Creamos la función
 async def cantidad_filmaciones_dia(dia: str):
     # Variable conteo
@@ -68,7 +67,7 @@ async def cantidad_filmaciones_dia(dia: str):
         raise HTTPException(status_code=404, detail="No se ha cargado ningún archivo Parquet")
     return{str(conteoD): "cantidad de peliculas fuerón estrenadas en los", "dias": dia}
 
-@app.get("/Movies2", tags=['Proyecto_01'])
+@app.get("/Score Titulo", tags=['Proyecto_01'])
 # Función para el score por filmación
 async def score_titulo(Titulo: str):
     # Condición para saber si cargo el archivo
@@ -85,7 +84,7 @@ async def score_titulo(Titulo: str):
       raise HTTPException(status_code=404, detail="No se ha cargado ningún archivo Parquet")
     return Variable
 
-@app.get("/Movies3", tags=['Proyecto_01'])
+@app.get("/Votos por titulo", tags=['Proyecto_01'])
 # Creamos la función
 async def votos_titulo(Titulo: str):
     # Si no encuentra el titulo solicitado
@@ -104,7 +103,7 @@ async def votos_titulo(Titulo: str):
       raise HTTPException(status_code=404, detail="No se ha cargado ningún archivo Parquet")
     return Variable
 
-@app.get("/Union", tags=['Proyecto_01'])
+@app.get("/Datos del actor", tags=['Proyecto_01'])
 # Creamos la función
 async def actor(Actor: str):
     # Valor que toma la variable si no encuentra el dato
@@ -130,7 +129,7 @@ async def actor(Actor: str):
         raise HTTPException(status_code=404, detail="No se ha cargado ningún archivo Parquet")
     return Variable
 
-@app.get("/Union1", tags=['Proyecto_01'])
+@app.get("/Datos director", tags=['Proyecto_01'])
 async def Director(Director: str):
     # Se inicializa una lista y una variable en 0
     Datos = []
@@ -149,7 +148,7 @@ async def Director(Director: str):
         raise HTTPException(status_code=404, detail="No se ha cargado ningún archivo Parquet")
     return Datos        
 
-@app.get("/Movies4", tags=['Proyecto_01'])
+@app.get("/Recomendaciones de peliculas", tags=['Proyecto_01'])
 async def Recomendaciones(Pelicula: str):
     # Convertimos los titulos de las peliculas en una matriz TF-IDF
     vectorizer = TfidfVectorizer(stop_words='english')
