@@ -1,3 +1,4 @@
 # Descripción
 Este proyecto tiene como objetivo realiza un sistema de recomendación de peliculas similares para esto se tiene que tomar en cuenta el score y la similitud en los titulos de cada pelicula, para hacer esto primero hay que realizar un ETL donde se limpiaran los datos y se realizan algunas transformaciones, se realiza un EDA para poder ánalizar los datos que tenemos y de esta manera saber que variables nos pueden dar mayor clasificación y asi poder entrenar nuestro modelo de Machine Learning que sera el encargado de darnos las peliculas con mas similitud para por ultimo dar la recomendación de las peliculas que depende de una pelicula ingresada.
-https://github.com/GLibardoAlarcon/Proyecto01/blob/main/Imagenes/recomendacion.jfif
+
+Imagenes/recomendacion.jfif
