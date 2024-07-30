@@ -4,4 +4,12 @@ Este proyecto tiene como objetivo realiza un sistema de recomendación de pelicu
 ![Recomendación](Imagenes/recomendacion.jfif)
 
 # Tabla de contenido 
-1 [Introducción](#Descripción)
+1. [Introducción](#Descripción)
+2. [Instalación y requisitos](#Instalación_y_Requisitos)
+
+## Instalación_y_Requisitos
+Requisitos 
+- Link de render
+- link de Github
+Psos para su funcionamiento
+1 ingresar a
