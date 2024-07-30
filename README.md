@@ -32,5 +32,7 @@ Installación
 
 ## Uso_y_ejecución
 1. Ingresa al la primera iteración Uploat_parque donde vas a ingresar el archivo df_union.parquet
-2. 
+2. Ingresa a filmaciones M en esta obción pide ingresar un mes del año y obtendra las filmaciones que se hicierón en ese mes
+3. Ingresa a filmaciones D en esta obcion ingresar un dia de la semana y dara como resultado las filmaciones que se hicierón ese día
+4. 
 
