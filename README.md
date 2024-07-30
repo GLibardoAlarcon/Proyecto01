@@ -11,5 +11,7 @@ Este proyecto tiene como objetivo realiza un sistema de recomendación de pelicu
 Requisitos 
 - Link de render
 - link de Github
+
 Psos para su funcionamiento
-1 ingresar a
+1. ingresar a Github https://github.com/GLibardoAlarcon/Proyecto01
+2. acceder a la sigiente ruta y descargar 
