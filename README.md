@@ -6,23 +6,31 @@ Este proyecto tiene como objetivo realiza un sistema de recomendación de pelicu
 # Tabla de contenido 
 1. [Introducción](#Descripción)
 2. [Instalación y requisitos](#Instalación_y_Requisitos)
-2. [Estructura_del_proyecto](#Estructura_del_proyecto)
+3. [Estructura_del_proyecto](#Estructura_del_proyecto)
+4. [Uso_y_ejecución](#Uso_y_ejecución)
 
 ## Instalación_y_Requisitos
 Requisitos 
 - Link de render
 - link de Github
 
-Psos para su funcionamiento
-1. ingresar a Github https://github.com/GLibardoAlarcon/Proyecto01
-2. acceder a la sigiente ruta y descargar df_union.parquet Data/df_union.parquet
+Installación
+1. Python 3.7 o superior
+2. pandas
+3. numpy
+4. matplotlib
+5. scikit-learn
+6. ingresar a Github https://github.com/GLibardoAlarcon/Proyecto01
+7. acceder a la sigiente ruta y descargar df_union.parquet Data/df_union.parquet
 3. Acceder a link de fastApi https://proyecto01-1.onrender.com/docs
-4. Ingresa al la primera iteración Uploat_parque donde vas a ingresar el archivo df_union.parquet
-5. Ya iterar con las demas opciones, cada una de ellas te va a pedir un dato que tienes que ingresar para que puedas consumir el Api
 
 ## Estructura_del_proyecto
-<mark>.venv<mark> Contiene las librerias necesarias para que funcione el proyecto main.py en un entorno virtual pero a nivel local
-<mark>Data<mark> Contiene los archivos que se se utilizarón para el ánalisi y para que ingresar a FasApi
-<mark>notebooks<mark> Contiene el archivos .py y ipynb 
-<mark>README<mark> Contenido explicativo e introductorio
+- <mark>.venv</mark> Contiene las librerias necesarias para que funcione el proyecto main.py en un entorno virtual pero a nivel local
+- <mark>Data</mark> Contiene los archivos que se se utilizarón para el ánalisis y para la aplicación FastApi
+- <mark>notebooks</mark> Contiene el archivos .py y ipynb 
+- <mark>README</mark> Contenido explicativo e introductorio
+
+## Uso_y_ejecución
+1. Ingresa al la primera iteración Uploat_parque donde vas a ingresar el archivo df_union.parquet
+2. 
 
