@@ -9,6 +9,9 @@ Este proyecto tiene como objetivo realiza un sistema de recomendación de pelicu
 3. [Estructura_del_proyecto](#Estructura_del_proyecto)
 4. [Uso_y_ejecución](#Uso_y_ejecución)
 5. [Datos_y_fuentes](#Datos_y_fuentes)
+6. [Metodología](#Metodología)
+7. [Resultados_y_concluciones](#Resultados_y_concluciones)
+8. [Autores](#Autores)
 
 ## Instalación_y_Requisitos
 Requisitos 
@@ -47,7 +50,15 @@ Installación
 Las fuentes se encuentran en los archivos cargados donde contienen informacion de cada pelicula como su nombre, año, popularidad, votos y demás información que es valiosa, esta información esta distribuida en los archivos Movies.parquet y credits.parquet, pero en el archivo de Union.parquet esta la información más relebante de los dos archivos.
 
 ## Metodología 
+Se utilizarón tecnicas de desanidado, limpieza y transformaciones que hacen parte del ETL, se realizo un ánalisis de los datos para tener una mejor vición de los datos que se iba a trabajar, por ultimo se utiliza tecnicas de Machine Learning para poder dar con mayor precisión las recomendaciones.
 
+## Resultados_y_concluciones
+- En el ánalisis pudimos encontrar las variables que mejor explicaban su categoria popularity y vote_count
+- Pudimos ver que algunos valores estaban muy alejados y nos dio como resultado que en los ultimos años las peliculas an tenido mayor prestijio
+- En las puntuaciones de la mayoria de las peliculas en un rango de 0 a 10 se encuentra la gran mayoria de 4 a 7 de puntuación
+
+## Autores:
+Libardo Alarcón
 
 
 
