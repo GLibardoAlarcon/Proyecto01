@@ -12,22 +12,7 @@ app = FastAPI()
 # Para cada una de estas funciones hay que agregar un archivo en cual funciona para todas estas el cual es df_union.parquet
 
 # Variable global para almacenar el DataFrame
-df_movies = None
-# Utilizamos poet para que nos pueda recibir nuestro archivo parquet
-@app.post("/upload-parquet/", tags=['Carga_parquet'])
-# Realizamos la función
-async def upload_parquet(file: UploadFile = File(...)):
-    # Creamos nuestra variable global
-    global df_movies
-    contents = await file.read()
-    try:
-        # Si todo sale bien nos carga el archivo y retorna un mensaje de confirmación
-        df_movies = pd.read_parquet(BytesIO(contents), engine='pyarrow')
-    except Exception as e:
-        # Envia un error de no cargarce
-        raise HTTPException(status_code=400, detail=str(e))
-    return {"message": "Archivo Parquet cargado con éxito"}
-
+df_movies = pd.read_parquet('./Data/movies_dataset_f.parquet')
 
 @app.get("/filmaciones M/", tags=['Proyecto_01'])
 # Función para la cantidas de filmaciones segun el mes
