@@ -1,4 +1,4 @@
-from fastapi import FastAPI, File, UploadFile, HTTPException
+from fastapi import FastAPI, File, UploadFile, HTTPException, Query
 import pandas as pd
 from babel.dates import format_date
 from io import BytesIO 
@@ -7,32 +7,39 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from scipy.sparse import hstack
 from sklearn.cluster import KMeans
 from sklearn.metrics.pairwise import cosine_similarity
+from enum import Enum
+from typing import List
 app = FastAPI()
 
-# Para cada una de estas funciones hay que agregar un archivo en cual funciona para todas estas el cual es df_union.parquet
+# Cargar el archivo Parquet
+try:
+    df_movies = pd.read_parquet('./Data/movies_dataset_f.parquet')
+except FileNotFoundError:
+    # Si no se carga el archivo parquet envia un mensage de error
+    raise HTTPException(status_code=404, detail="Archivo Parquet no encontrado")
 
-# Variable global para almacenar el DataFrame
-df_movies = pd.read_parquet('./Data/movies_dataset_f.parquet')
+# Extraer los meses en idioma español, donde quedan guardados en una variable
+meses_disponibles = list(df_movies['release_date'].dropna().apply(lambda x: format_date(x, 'MMMM', locale='es_ES')).unique())
 
-@app.get("/filmaciones M/", tags=['Proyecto_01'])
-# Función para la cantidas de filmaciones segun el mes
-async def cantidad_filmaciones_mes(mes: str):
-    # Variable que se hace cargo de llevar el conteo
-    conteo = 0
-    # Condición que nos permite saber si se cargo el archivo
-    if df_movies is not None:
-        # Toma todos los meses en idioma español
-        mes1 = df_movies['release_date'].apply(lambda x: format_date(x, 'MMMM', locale='es_ES'))
-        # Ciclo para recorrer cada uno de los meses 
-        for i in range(0, len(df_movies)):
-            # Si el mes ingresado es igual al de la columna se incrementara en 1
-            if mes1[i] == mes:
-                conteo +=1
-        # Variable donde optendremos la información
-        Variable = {str(conteo): "Cantidad de péliculas fuerón estrenadas en el", "mes de": mes}
-    else:
+@app.get("/filmaciones_mes/", tags=['Proyecto_01'])
+async def cantidad_filmaciones_mes(
+    mes: str = Query(..., description="Selecciona el mes", enum=meses_disponibles)
+):
+    # Verificar que el archivo se haya cargado correctamente
+    if df_movies is None:
         raise HTTPException(status_code=404, detail="No se ha cargado ningún archivo Parquet")
-    return Variable
+
+    # Filtrar y contar las filmaciones del mes especificado
+    mes_column = df_movies['release_date'].apply(lambda x: format_date(x, 'MMMM', locale='es_ES'))
+    conteo = (mes_column == mes).sum()
+
+    # Crear el mensaje de respuesta
+    respuesta = {
+        "cantidad_peliculas": conteo,
+        "mensaje": f"Cantidad de películas estrenadas en el mes de {mes}"
+    }
+    
+    return respuesta
 
 @app.get("/Filmaciones D", tags=['Proyecto_01'])
 # Creamos la función
