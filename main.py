@@ -20,6 +20,10 @@ except FileNotFoundError:
 
 # Extraer los meses en idioma español, donde quedan guardados en una variable
 meses_disponibles = list(df_movies['release_date'].dropna().apply(lambda x: format_date(x, 'MMMM', locale='es_ES')).unique())
+# Extraemos los días unicos del dataset
+dias_unicos = list(df_movies['release_date'].apply(lambda x: format_date(x, 'EEEE', locale='es_ES')).unique())
+# Extraemos los titulos unicos
+Titulos_unicos = list(df_movies['title'].unique())
 
 @app.get("/filmaciones_mes/", tags=['Proyecto_01'])
 async def cantidad_filmaciones_mes(
@@ -33,9 +37,9 @@ async def cantidad_filmaciones_mes(
     mes_column = df_movies['release_date'].apply(lambda x: format_date(x, 'MMMM', locale='es_ES'))
     conteo = (mes_column == mes).sum()
 
-    # Crear el mensaje de respuesta
+    # Mensaje de respuesta
     respuesta = {
-        "cantidad_peliculas": conteo,
+        "cantidad_peliculas": int(conteo),
         "mensaje": f"Cantidad de películas estrenadas en el mes de {mes}"
     }
     
@@ -43,37 +47,36 @@ async def cantidad_filmaciones_mes(
 
 @app.get("/Filmaciones D", tags=['Proyecto_01'])
 # Creamos la función
-async def cantidad_filmaciones_dia(dia: str):
-    # Variable conteo
-    conteoD = 0
-    # condición para saber si cargo el archivo
-    if df_movies is not None:
-        # Trasformación en dias en español
-        dia1 = df_movies['release_date'].apply(lambda x: format_date(x, 'EEEE', locale='es_ES'))
-        # Ciclo para recorrer cada día
-        for i in range(0, len(df_movies)):
-            # validación de día
-            if dia1[i] == dia:
-                conteoD += 1
-    else:
+async def cantidad_filmaciones_dia(dia: str = Query(..., description="Seleccione el día", enum = dias_unicos)):
+
+     # Verificar que el archivo se haya cargado correctamente
+    if df_movies is None:
         raise HTTPException(status_code=404, detail="No se ha cargado ningún archivo Parquet")
-    return{str(conteoD): "cantidad de peliculas fuerón estrenadas en los", "dias": dia}
+    # Filtrar y contar las filmaciones por día
+    dias_column = df_movies['release_date'].apply(lambda x: format_date(x, 'EEEE', locale='es_ES'))
+    conteo = (dias_column == dia).sum()
+    # Mensage de respuesta
+    return  {
+        "Cantidad de peliculas": int(conteo),
+        "Mensaje": f"Cantidad de películas estrenadas en el día {dia}"
+    }
+
+
 
 @app.get("/Score Titulo", tags=['Proyecto_01'])
 # Función para el score por filmación
 async def score_titulo(Titulo: str):
-    # Condición para saber si cargo el archivo
-    Variable = {"El dato ingresado es incorrecto o no": "se encuentra en nuestra base de datos"}
-    if df_movies is not None:
+     # Verificar que el archivo se haya cargado correctamente
+    if df_movies is None:
+        raise HTTPException(status_code=404, detail="No se ha cargado ningún archivo Parquet")
          # ciclo para recorrer cada uno de los titulos
-         for i in range(0, len(df_movies)):
+    for i in range(0, len(df_movies)):
              # Si el titulo es el mismo que el ingresado nos guarda la información en cada una de las variables
              if df_movies['title'][i] == Titulo:
                 popularity = df_movies['popularity'][i]
                 year = df_movies['release_year'][i]
                 Variable = {"La pelicula": Titulo, "Fue estrenada en el año": str(year), "Con un score/popularidad de": str(popularity)}
-    else:
-      raise HTTPException(status_code=404, detail="No se ha cargado ningún archivo Parquet")
+
     return Variable
 
 @app.get("/Votos por titulo", tags=['Proyecto_01'])
