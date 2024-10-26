@@ -11,5 +11,3 @@ requests
 wordcloud
 babel
 pyarrow
-enum
-typing
